@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/grey_500">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingLeft="@dimen/spacing_large"
+            android:paddingRight="@dimen/spacing_large">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Scan Code Results"
+                android:textStyle="bold"
+                android:textSize="23sp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actual string"
+            android:textSize="23sp"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:paddingEnd="@dimen/spacing_large"
+            android:textStyle="bold"
+            android:paddingRight="@dimen/spacing_large" />
+
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/act"
+            android:text="msg"
+            android:textSize="23sp"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:paddingEnd="@dimen/spacing_large"
+            android:textStyle="normal"
+            android:paddingRight="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Encoded string"
+            android:textSize="23sp"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:paddingEnd="@dimen/spacing_large"
+            android:textStyle="bold"
+            android:paddingRight="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actual string"
+            android:id="@+id/dec"
+            android:textSize="23sp"
+            android:textColor="#000"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:paddingEnd="@dimen/spacing_large"
+            android:textStyle="normal"
+            android:paddingRight="@dimen/spacing_large" />
+
+
+
+
+
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
