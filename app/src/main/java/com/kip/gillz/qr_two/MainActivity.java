@@ -135,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         mCodeScanner.releaseResources();
         super.onPause();
+
+
+        
     }
 
     private boolean checkPermission() {
