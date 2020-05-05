@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
 
-        
+
     }
 
     private boolean checkPermission() {
