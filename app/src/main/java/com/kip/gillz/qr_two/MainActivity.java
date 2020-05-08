@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,25 +37,33 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.Callback;
 
 public class MainActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    public static final String ROOT_URL = "https://tal.co.ke/";
+    String Cod;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        //initToolbar();
         if (checkPermission()) {
-            //main logic or main code
-
             CodeScannerView scannerView = findViewById(R.id.scanner_view);
             mCodeScanner = new CodeScanner(this, scannerView);
             mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -64,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                           /* Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                            r.play();*/
-
                             ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
                             tg.startTone(ToneGenerator.TONE_PROP_BEEP);
 
@@ -75,38 +80,15 @@ public class MainActivity extends AppCompatActivity {
                             Vibrator v = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                             v.vibrate(100);// Vibrate for 1 seconds
 
-                            //Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
 
                             String encode = Base64.encodeToString(result.getText().getBytes(), Base64.DEFAULT);
                             //endoded
                             byte[] data = Base64.decode(encode, Base64.DEFAULT);
                             String text = new String(data, StandardCharsets.UTF_8);
-                            //tdecoded
+                            //decoded
 
-                            //Toast.makeText(MainActivity.this, encode, Toast.LENGTH_SHORT).show();
-
-
-                            Intent intent = new Intent(MainActivity.this,Scan_Results.class);
-                            intent.putExtra("actual", result.getText() );// sent value to the next activity
-                            intent.putExtra("decode", encode );// sent value to the next activity
-                            startActivity(intent);
-
-                            /*final Dialog dialog = new Dialog(MainActivity.this);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog.setContentView(R.layout.confirmdetails);
-                            dialog.setCancelable(false);
-                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                            lp.copyFrom(dialog.getWindow().getAttributes());
-                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                            ((TextView) dialog.findViewById(R.id.act)).setText(result.getText());
-                            ((TextView) dialog.findViewById(R.id.dec)).setText(encode);
-
-
-
-                            dialog.show();
-                            dialog.getWindow().setAttributes(lp);*/
+                           Cod = result.getText();
+                           submitcode();
 
                         }
                     });
@@ -130,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mCodeScanner.startPreview();
     }
-
     @Override
     protected void onPause() {
         mCodeScanner.releaseResources();
@@ -139,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
     private boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -191,6 +171,67 @@ public class MainActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+    private void submitcode(){
+
+        //Here we will handle the http request to insert user to mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build();
+
+        final ProgressDialog progressDoalog;
+        progressDoalog = new ProgressDialog(MainActivity.this);
+        progressDoalog.setMessage("Please Wait....");
+        progressDoalog.setTitle("Verifying Code");
+        progressDoalog.setCancelable(false);
+        progressDoalog.setIndeterminate(true);
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.show();
+        SubmitAPI api = adapter.create(SubmitAPI.class);
+        api.insertUser(
+                Cod,
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+
+                        progressDoalog.dismiss();
+
+                        BufferedReader reader = null;
+                        String output = "";
+                        try {
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+                            output = reader.readLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (output.equals("Code Accepted"))
+                        {
+
+                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("SUCCESS")
+                                    .setContentText(output)
+                                    .setConfirmText("Continue")
+                                    .show();                        }
+                        else {
+                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Failed")
+                                    .setContentText(output)
+                                    .hideConfirmButton()
+                                    .setCancelText("Continue")
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        progressDoalog.dismiss();
+                        Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+
+                    }
+                }
+        );
+    }
+
 
 }
 

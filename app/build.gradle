@@ -8,6 +8,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,5 +34,18 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
 
     implementation 'com.budiyev.android:code-scanner:2.1.0'
+
+    //lovely dialog
+    implementation 'com.yarolegovich:lovely-dialog:1.1.0'
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    //sweet dialog
+    implementation 'com.github.f0ris.sweetalert:library:1.5.6'
+
 
 }
