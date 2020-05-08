@@ -54,7 +54,7 @@ import retrofit.Callback;
 public class MainActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private static final int PERMISSION_REQUEST_CODE = 200;
-    public static final String ROOT_URL = "https://tal.co.ke/";
+    public static final String ROOT_URL = "Your Url";
     String Cod;
 
     @Override
